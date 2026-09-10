@@ -26,9 +26,14 @@
 // The palette values are ported from the `newspaper` appearance of another
 // project; the original token block is kept at reference/newspaper-palette.css
 // for the reasoning behind each one.
-.theme-light:not(.rg-classic-scheme) {
-  // Style Settings writes to these two, so they carry the defaults that
-  // "reset" returns to, exactly as Red Graphite's own schemes do.
+// Slider-controlled defaults, declared through :where() so they contribute NO
+// specificity. Style Settings applies its sliders at a specificity that the main
+// scheme block below (a `.theme-light:not()` selector) would outrank, which
+// silently shadowed every slider — base colour, accent, ink mottle, File Color
+// chip opacity. At :where() specificity the sliders win, while source order still
+// lets these beat Red Graphite's own `.theme-light` defaults. Everything that is
+// NOT slider-controlled stays in the higher-specificity block below.
+.theme-light:where(:not(.rg-classic-scheme)) {
   --red-graphite-base-color-h: 42;
   --red-graphite-base-color-s: 7%;
   --red-graphite-base-color-l: 4%;
@@ -37,6 +42,14 @@
   --red-graphite-accent-color-s: 0%;
   --red-graphite-accent-color-l: 4%;
 
+  // Overriding the plugin's fixed 15% File Color chips (plugins/file-color.scss).
+  --fc-chip-opacity: 35;
+
+  // How far the paper bleeds through the ink (app/newsprint-ink.scss).
+  --newsprint-mottle-opacity: 0.45;
+}
+
+.theme-light:not(.rg-classic-scheme) {
   --theme-base-color-h: var(--red-graphite-base-color-h);
   --theme-base-color-s: var(--red-graphite-base-color-s);
   --theme-base-color-l: var(--red-graphite-base-color-l);
@@ -122,14 +135,6 @@
   // hover state at all. One step is enough to feel on paper.
   --interactive-hover: var(--color-base-10);
 
-  // How far the paper bleeds through the ink in the uneven-ink overlay
-  // (app/newsprint-ink.scss). Set here so it has a default without Style
-  // Settings; the plugin exposes it as a slider.
-  --newsprint-mottle-opacity: 0.45;
-
-  // Opacity of File Color background chips, overriding the plugin's fixed 15%
-  // (plugins/file-color.scss). Unitless; a slider exposes it.
-  --fc-chip-opacity: 35;
 
   // --- Chrome: light newsprint, with the file tree kept dark ----------------
   //

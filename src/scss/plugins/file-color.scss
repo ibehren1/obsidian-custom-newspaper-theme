@@ -12,11 +12,13 @@
 // file is skipped so its selection bar still shows through. Light scheme only —
 // the dark classic scheme keeps the plugin's own 15%.
 .theme-light:not(.rg-classic-scheme) {
+  // `!important` because File Color applies its baked 15% background with a rule
+  // this cannot otherwise outrank (confirmed: without it the chip stays at 0.15).
   .file-color-type-background .tree-item-self:not(.is-active) {
     background-color: color-mix(
       in srgb,
       var(--file-color-color) calc(var(--fc-chip-opacity, 35) * 1%),
       transparent
-    );
+    ) !important;
   }
 }
