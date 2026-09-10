@@ -87,9 +87,18 @@
   --background-modifier-border-hover: var(--color-base-45);
   --background-modifier-border-focus: var(--color-base-50);
 
-  // Text drops one step darker than Red Graphite's mapping. Its steps were
-  // picked against a linear ramp, where step 70 is 30% off the ink; here step 70
-  // is 29 points off the PAPER, which would leave muted text at 4.7:1.
+  // Body text is faded ink, not the full-strength ramp end. Real newsprint ink
+  // is a warm charcoal that has soaked into the paper, so `--text-normal` is the
+  // ink mixed a little way toward the page rather than `--color-base-100` flat:
+  // that both lightens it and pulls it toward the paper's warmth. Mixed against
+  // `--background-primary` so it tracks the page if the base colour is retuned in
+  // Style Settings. ~10:1 on the page — softened, still crisp, and still clear of
+  // muted below it.
+  --text-normal: color-mix(in oklch, var(--color-base-100) 87%, var(--background-primary));
+
+  // Muted and faint drop one step darker than Red Graphite's mapping. Its steps
+  // were picked against a linear ramp, where step 70 is 30% off the ink; here
+  // step 70 is 29 points off the PAPER, which would leave muted text at 4.7:1.
   --text-muted: var(--color-base-80);
   --text-faint: var(--color-base-70);
 
