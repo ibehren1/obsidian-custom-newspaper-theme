@@ -9,10 +9,11 @@ boundary carries meaning. The accent is the ink — links are underlined ink,
 active states are solid ink — so colour appears only where it means something.
 
 The chrome is light newsprint too, a shade darker than the page so it frames it —
-tab bar, right sidebar, panels, menus, status bar, and the plugin views that
-render there are all paper with ink text. The one exception is the **left file
-tree**, kept on Red Graphite's dark background as a deliberate contrast, with
-light text against it.
+tab bar, sidebars, the file tree, panels, menus, and status bar are all paper with
+ink text. Nothing is a dark slab, so third-party panels that use the standard
+surface and text tokens stay readable. If you colour files with the File Color
+plugin, its **background** mode reads best here: the hues show as chips in the
+light tree, rather than as coloured text that would wash out on paper.
 
 Typography is left alone. The theme sets colour and shape; fonts come from
 Red Graphite's Style Settings text fields or from Obsidian's Appearance settings.

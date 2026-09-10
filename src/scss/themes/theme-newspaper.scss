@@ -182,53 +182,27 @@
     color: var(--text-normal);
   }
 
-  // Backlink / outgoing-link / tag panes live in the right sidebar, which is now
-  // light; Red Graphite colours their rows for the old dark chrome.
-  .backlink-pane .tree-item-self,
-  .outgoing-link-pane .tree-item-self,
-  .tag-pane .tree-item-self {
+  // The file navigator is light now, like the rest of the chrome. Red Graphite
+  // colours its rows light for the dark sidebar it used to have, so the nav text,
+  // collapse arrows and indentation guides come back to ink. The selected file is
+  // the ink accent with a light label — an ink bar on the paper — and hover is a
+  // quiet wash so it does not fight a File Color background chip beneath it.
+  --nav-item-color: var(--text-muted);
+  --nav-item-color-hover: var(--text-normal);
+  --nav-item-color-active: var(--text-on-accent);
+  --nav-item-color-selected: var(--text-on-accent);
+  --nav-item-background-hover: var(--background-modifier-hover);
+  --nav-item-background-active: var(--interactive-accent);
+  --nav-item-background-selected: var(--interactive-accent);
+  --nav-collapse-icon-color: var(--text-faint);
+  --nav-collapse-icon-color-collapsed: var(--text-faint);
+  --nav-indentation-guide-color: var(--background-modifier-border);
+
+  // Right-sidebar trees (outline, backlinks, tags) and search results are on
+  // light chrome now; Red Graphite coloured them for the old dark sidebars.
+  .mod-right-split .tree-item-self,
+  .search-result-file-title {
     color: var(--text-muted);
-  }
-
-  // --- The left file tree: the one dark island ------------------------------
-  //
-  // Kept on the dark background by request. Its surface is re-darkened and the
-  // text, icons and vault name return to the light end of the ramp so they read
-  // against it. Red Graphite already colours the file rows light through the nav
-  // tokens; the nav hover fills and collapse arrows (which Red Graphite points at
-  // the ink accent, invisible on dark) are the pieces that have to be restated
-  // here, along with the tree/search text.
-  .workspace-split.mod-left-split {
-    // Kept dark because the File Color plugin's per-folder hues are tuned to read
-    // against it; flipping this to paper would wash them out and re-picking every
-    // colour is not worth it. A crisp ink edge makes the rail read as a deliberate
-    // index alongside the light chrome rather than a leftover dark panel.
-    background-color: var(--color-base-100);
-    border-inline-end: 1px solid var(--color-base-100);
-    --background-secondary: var(--color-base-100);
-    --background-secondary-alt: var(--color-base-95);
-    --divider-color: var(--color-base-95);
-
-    --icon-color: var(--color-base-60);
-    --icon-color-hover: var(--color-base-00);
-    --icon-color-focused: var(--color-base-00);
-    --vault-profile-color: var(--color-base-40);
-    --vault-profile-color-hover: var(--color-base-00);
-
-    --tab-text-color: var(--color-base-40);
-    --tab-text-color-focused: var(--color-base-40);
-
-    --nav-item-background-hover: var(--color-base-80);
-    --nav-item-background-active: var(--color-base-75);
-    --nav-collapse-icon-color: var(--color-base-40);
-    --nav-collapse-icon-color-collapsed: var(--color-base-40);
-
-    .tree-item-self,
-    .nav-folder-title,
-    .nav-file-title,
-    .search-result-file-title {
-      color: var(--color-base-40);
-    }
   }
 
   // --- Ink rules ------------------------------------------------------------
