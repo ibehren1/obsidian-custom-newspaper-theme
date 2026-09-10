@@ -13,7 +13,9 @@ tab bar, sidebars, the file tree, panels, menus, and status bar are all paper wi
 ink text. Nothing is a dark slab, so third-party panels that use the standard
 surface and text tokens stay readable. If you colour files with the File Color
 plugin, its **background** mode reads best here: the hues show as chips in the
-light tree, rather than as coloured text that would wash out on paper.
+light tree, rather than as coloured text that would wash out on paper. The plugin
+bakes those chips at 15%; a **File Color chip opacity** slider in Style Settings
+overrides that so you can dial how strongly they show.
 
 Typography is left alone. The theme sets colour and shape; fonts come from
 Red Graphite's Style Settings text fields or from Obsidian's Appearance settings.

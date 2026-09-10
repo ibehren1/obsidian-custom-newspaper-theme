@@ -127,6 +127,10 @@
   // Settings; the plugin exposes it as a slider.
   --newsprint-mottle-opacity: 0.45;
 
+  // Opacity of File Color background chips, overriding the plugin's fixed 15%
+  // (plugins/file-color.scss). Unitless; a slider exposes it.
+  --fc-chip-opacity: 35;
+
   // --- Chrome: light newsprint, with the file tree kept dark ----------------
   //
   // Red Graphite frames the light document in near-black chrome. This scheme

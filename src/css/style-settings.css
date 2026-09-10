@@ -35,6 +35,16 @@ settings:
   max: 1
   step: 0.05
 
+- id: fc-chip-opacity
+  title: File Color chip opacity
+  description: |
+    If you use the File Color plugin with its "Color Background" option, this sets how strongly the colour chips show in the file tree. The plugin bakes them at 15%; this overrides it. Newspaper scheme only.
+  type: variable-number-slider
+  default: 35
+  min: 0
+  max: 80
+  step: 5
+
 - id: red-graphite-colors
   title: Colors
   type: heading

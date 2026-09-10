@@ -48,6 +48,7 @@
 @use 'plugins/dangling-links.scss';
 @use 'plugins/kanban.scss';
 @use 'plugins/makemd.scss';
+@use 'plugins/file-color';
 @use 'plugins/style-settings';
 
 // The newspaper scheme is loaded last so it is emitted after every `.theme-light`

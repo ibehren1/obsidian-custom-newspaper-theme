@@ -1,0 +1,22 @@
+// FILE COLOR — chip opacity
+//
+// The File Color plugin paints a folder's colour as a background chip baked at a
+// fixed 15% alpha, with no opacity control of its own — faint on the light paper
+// tree. It does expose each folder's full hue as the custom property
+// `--file-color-color`, so the chip is re-rendered here at an adjustable opacity
+// rather than the plugin's fixed 15%. Generic: it reads the plugin's variable, so
+// it needs no knowledge of the palette and keeps working as colours are added.
+//
+// `--fc-chip-opacity` is a unitless number (the Style Settings slider emits no
+// unit), turned into a percentage with `calc(... * 1%)` for color-mix. The active
+// file is skipped so its selection bar still shows through. Light scheme only —
+// the dark classic scheme keeps the plugin's own 15%.
+.theme-light:not(.rg-classic-scheme) {
+  .file-color-type-background .tree-item-self:not(.is-active) {
+    background-color: color-mix(
+      in srgb,
+      var(--file-color-color) calc(var(--fc-chip-opacity, 35) * 1%),
+      transparent
+    );
+  }
+}
