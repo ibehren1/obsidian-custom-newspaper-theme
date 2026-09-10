@@ -1,37 +1,17 @@
-// PRIMARY-ACTION BUTTONS
+// FIREFOX-STYLE DIALOG BUTTONS
 //
-// Two button systems can carry a primary action, and both must stay readable
-// against the ink accent in this scheme:
+// Normal Obsidian CTA buttons (`button.mod-cta`, e.g. the PDF export "Save")
+// need nothing here: their fill is already the ink accent and their label is
+// `--text-on-accent`, which theme-newspaper.scss forces light by redefining
+// `--text-on-accent-inverted`.
 //
-//   1. `button.mod-cta` — normal Obsidian modals (the PDF export "Save", etc.).
-//      Its background is the ink accent and its label is `--text-on-accent`.
-//      That already resolves light, but the label is pinned here so it can never
-//      fall back to `--text-normal`, which this scheme fades toward the paper and
-//      which would then read as dark ink on the dark button.
-//
-//   2. `.dialog .mainContainer button.primaryButton` — the Firefox-derived
-//      dialogs. These use a separate `--button-primary-*` token family that
-//      ships a blue button by default, off-theme here and, depending on the OS
-//      colour scheme, able to land dark text on its fill. Pointed at the ink /
-//      paper palette so it matches and is guaranteed to have a light label.
-//
-// The selectors are deliberately specific enough to outrank Obsidian's own
-// `.dialog .mainContainer button.primaryButton` rule and the base `button`
-// rule that set these colours.
+// The Firefox-derived `.dialog` component is the exception. It uses a separate
+// `--button-primary-*` token family that ships a blue primary button, off-theme
+// here and — depending on OS colour scheme — able to land dark text on its fill.
+// These point it at the ink / paper palette. The `:not()` chain mirrors
+// Obsidian's own selector so this matches its specificity and then wins on the
+// leading theme classes; without it the stock rule outranks this.
 .theme-light:not(.rg-classic-scheme) {
-  button.mod-cta {
-    --text-color: var(--text-on-accent);
-    color: var(--text-on-accent);
-    background-color: var(--interactive-accent);
-  }
-
-  button.mod-cta:hover {
-    background-color: var(--color-accent-2);
-  }
-
-  // The `:not()` chain mirrors Obsidian's own selector so this matches its
-  // specificity and then wins on the leading theme classes; without it the stock
-  // blue rule outranks this and the override does nothing.
   .dialog
     .mainContainer
     button.primaryButton:not(.toggle-button):not(.closeButton):not(.clearInputButton) {

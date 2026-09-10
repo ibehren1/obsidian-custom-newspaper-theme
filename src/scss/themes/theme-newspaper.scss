@@ -74,6 +74,19 @@
   --color-accent-hsl: var(--red-graphite-accent-color-h), var(--red-graphite-accent-color-s),
     var(--red-graphite-accent-color-l);
 
+  // Text drawn ON the accent — the label of a CTA button, a checkbox tick, a
+  // toggle knob, a pill on the accent — must stay light, because the accent is
+  // always near-black ink here. Obsidian works against that: its JS measures the
+  // accent set in Appearance and, when it reads as light, writes
+  // `--text-on-accent: var(--text-on-accent-inverted)` inline on the body, and
+  // `--text-on-accent-inverted` is black. That inline value cannot be beaten by a
+  // stylesheet — but the variable it points at can, so `--text-on-accent-inverted`
+  // is redefined to the light paper. Whether or not Obsidian flips, on-accent
+  // text now resolves light. Both tokens are pinned so the non-flipped path is
+  // covered too.
+  --text-on-accent: var(--color-base-00);
+  --text-on-accent-inverted: var(--color-base-00);
+
   // --- Page -----------------------------------------------------------------
   //
   // Red Graphite maps the page to step 20 and the code background to step 00,
