@@ -1,0 +1,15 @@
+{
+	"name": "obsidian-newspaper-theme",
+	"version": "0.1.0",
+	"description": "A newspaper-inspired theme for Obsidian.",
+	"license": "MIT",
+	"scripts": {
+		"version": "node version-bump.mjs && git add manifest.json versions.json",
+		"lint": "stylelint \"**/*.css\"",
+		"lint:fix": "stylelint \"**/*.css\" --fix"
+	},
+	"devDependencies": {
+		"stylelint": "^17.0.0",
+		"stylelint-config-obsidianmd": "^0.1.0"
+	}
+}
