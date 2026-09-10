@@ -127,58 +127,103 @@
   // Settings; the plugin exposes it as a slider.
   --newsprint-mottle-opacity: 0.45;
 
-  // --- Chrome ---------------------------------------------------------------
+  // --- Chrome: light newsprint, with the file tree kept dark ----------------
   //
-  // Every accent-coloured cue in Red Graphite's light scheme sits on the
-  // near-black chrome — the vault name, sidebar icons, nav item fills, collapse
-  // arrows. An ink accent on ink chrome is invisible, so each one is remapped to
-  // the paper end of the ramp. This is the cost of ink-as-accent, and it is paid
-  // here rather than by compromising the accent.
-  // Obsidian renamed the vault name block to `--vault-profile-*` and Red Graphite
-  // still sets the old `--vault-name-color`, which no longer resolves to
-  // anything. The live token defaults to `--text-normal`, which in this scheme is
-  // the same ink as the chrome behind it — so the vault name is invisible until
-  // it is pointed at the paper end of the ramp. Red Graphite's own light scheme
-  // has the same problem; this fixes it only here.
-  --vault-profile-color: var(--color-base-40);
-  --vault-profile-color-hover: var(--color-base-00);
+  // Red Graphite frames the light document in near-black chrome. This scheme
+  // keeps that frame only for the left file tree (the dark island below) and
+  // turns the rest of the chrome — tab bar, right sidebar, panels, menus, status
+  // bar, window frame, and the plugin views that render there — into light
+  // newsprint a shade darker than the page. Third-party panels that use the
+  // standard surface and text tokens then read correctly instead of putting ink
+  // text on a dark surface, which is the class of bug the dark chrome kept
+  // causing.
+  --background-secondary: var(--color-base-30);
+  --background-secondary-alt: var(--color-base-35);
 
-  --icon-color-hover: var(--color-base-00);
-  --icon-color-active: var(--color-base-00);
-  --icon-color-focused: var(--color-base-00);
-  --nav-item-background-hover: var(--color-base-80);
-  --nav-item-background-active: var(--color-base-75);
-  --nav-collapse-icon-color: var(--color-base-40);
-  --nav-collapse-icon-color-collapsed: var(--color-base-40);
+  // Pane dividers, the status bar, the ribbon and the window frame all inherited
+  // the dark chrome from Red Graphite; bring them onto the light ramp. The
+  // divider becomes a light hairline, the status bar and ribbon match the chrome,
+  // and the title bar keeps Red Graphite's ink text, which now reads on light.
+  --divider-color: var(--color-base-40);
+  --status-bar-background: var(--color-base-30);
+  --status-bar-border-color: var(--color-base-40);
+  --ribbon-background: var(--color-base-30);
+  --ribbon-background-collapsed: var(--color-base-30);
+  --titlebar-background: var(--color-base-30);
+  --titlebar-background-focused: var(--color-base-30);
+  --tab-divider-color: var(--color-base-40);
 
-  // The status bar is dark chrome (its background inherits the near-black
-  // divider colour), but its text defaults to `--text-muted`, which this scheme
-  // sets to dark ink for the page. Dark on dark is unreadable, so the status bar
-  // text is pulled back to the light end of the ramp like the other chrome text.
-  --status-bar-text-color: var(--color-base-40);
+  // Icons and the vault name sit on light chrome now, so they take ink. The file
+  // tree overrides them back to light inside its dark island.
+  --icon-color: var(--text-muted);
+  --icon-color-hover: var(--text-normal);
+  --icon-color-active: var(--color-accent);
+  --icon-color-focused: var(--text-normal);
+  --vault-profile-color: var(--text-muted);
+  --vault-profile-color-hover: var(--text-normal);
 
   // List markers live on the page, so they stay ink — just not full-strength
   // ink, which would compete with the text beside them.
   --list-marker-color: var(--color-base-70);
 
-  // Menus and the quick switcher are dark chrome in this scheme too, so their
-  // selected row cannot be the ink accent either — ink on the near-black menu is
-  // invisible. These are element rules in `app/menu.scss` and
-  // `app/suggestion-dropdown.scss` rather than tokens, so they are answered in
-  // kind with a grey step off the chrome. Red Graphite keeps the light text
-  // colour it already sets on these, so only the fill is replaced.
-  //
-  // The suggestion selector is deliberately as deep as Red Graphite's
-  // (`.suggestion-container .suggestion .suggestion-item.is-selected`) plus the
-  // scheme's own `:not(.rg-classic-scheme)`, so it outranks it. A shorter
-  // selector loses and the accent fill wins, which is the invisible state.
-  .menu-item:hover:not(.is-disabled):not(.is-label),
-  .menu-item.selected:not(.is-disabled):not(.is-label) {
-    background-color: var(--color-base-80);
+  // Menu and suggestion rows are on light chrome now, so their resting label is
+  // ink. Red Graphite fills the selected row with the accent and sets a light
+  // label on it, which on our ink accent reads as an ink bar with light text — so
+  // only the resting colour is darkened, and the accent selection is left alone.
+  .menu-item {
+    color: var(--text-normal);
   }
 
-  .suggestion-container .suggestion .suggestion-item.is-selected {
-    background-color: var(--color-base-80);
+  .menu-item-icon {
+    color: var(--text-muted);
+  }
+
+  .suggestion-item {
+    color: var(--text-normal);
+  }
+
+  // Backlink / outgoing-link / tag panes live in the right sidebar, which is now
+  // light; Red Graphite colours their rows for the old dark chrome.
+  .backlink-pane .tree-item-self,
+  .outgoing-link-pane .tree-item-self,
+  .tag-pane .tree-item-self {
+    color: var(--text-muted);
+  }
+
+  // --- The left file tree: the one dark island ------------------------------
+  //
+  // Kept on the dark background by request. Its surface is re-darkened and the
+  // text, icons and vault name return to the light end of the ramp so they read
+  // against it. Red Graphite already colours the file rows light through the nav
+  // tokens; the nav hover fills and collapse arrows (which Red Graphite points at
+  // the ink accent, invisible on dark) are the pieces that have to be restated
+  // here, along with the tree/search text.
+  .workspace-split.mod-left-split {
+    background-color: var(--color-base-100);
+    --background-secondary: var(--color-base-100);
+    --background-secondary-alt: var(--color-base-95);
+    --divider-color: var(--color-base-95);
+
+    --icon-color: var(--color-base-60);
+    --icon-color-hover: var(--color-base-00);
+    --icon-color-focused: var(--color-base-00);
+    --vault-profile-color: var(--color-base-40);
+    --vault-profile-color-hover: var(--color-base-00);
+
+    --tab-text-color: var(--color-base-40);
+    --tab-text-color-focused: var(--color-base-40);
+
+    --nav-item-background-hover: var(--color-base-80);
+    --nav-item-background-active: var(--color-base-75);
+    --nav-collapse-icon-color: var(--color-base-40);
+    --nav-collapse-icon-color-collapsed: var(--color-base-40);
+
+    .tree-item-self,
+    .nav-folder-title,
+    .nav-file-title,
+    .search-result-file-title {
+      color: var(--color-base-40);
+    }
   }
 
   // --- Ink rules ------------------------------------------------------------

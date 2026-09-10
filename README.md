@@ -7,8 +7,12 @@ The document you edit is newsprint: a toned page that never reaches white,
 near-black ink, squared corners, no shadows, and black hairline rules where a
 boundary carries meaning. The accent is the ink — links are underlined ink,
 active states are solid ink — so colour appears only where it means something.
-The chrome around the page stays near-black, which is Red Graphite's own
-arrangement and suits newsprint well: the page reads as a sheet on a desk.
+
+The chrome is light newsprint too, a shade darker than the page so it frames it —
+tab bar, right sidebar, panels, menus, status bar, and the plugin views that
+render there are all paper with ink text. The one exception is the **left file
+tree**, kept on Red Graphite's dark background as a deliberate contrast, with
+light text against it.
 
 Typography is left alone. The theme sets colour and shape; fonts come from
 Red Graphite's Style Settings text fields or from Obsidian's Appearance settings.
