@@ -1,19 +1,320 @@
+/* ============================================================================
+   NEWSPAPER — flat monochrome, e-ink / letterpress.
+
+   The palette is ported from the `newspaper` appearance of another app; the
+   original token block is kept verbatim at reference/newspaper-palette.css so
+   the intent behind each value stays readable. Two rules carry over from there
+   and govern everything below:
+
+     1. Newsprint, not office paper. The whole ramp sits well below white so the
+        page does not glare, with the faintest warm cast held deliberately low —
+        at this chroma it reads as paper, and pushing further tips into sepia.
+     2. The accent IS the ink. Links are underlined ink, active states are solid
+        ink. Colour appears only where it carries meaning.
+
+   The port is not a copy. The source palette dresses a dense app chrome of
+   10-12px labels, where content lives on raised panels above the window
+   background. Obsidian inverts that emphasis: its main surface is a reading
+   column. So the source's `surface` becomes the editor page and `canvas` drops
+   back to the sidebars, keeping the "content sits on a surface, and no surface
+   ever reaches white" relationship rather than the literal variable names.
+
+   Fonts are deliberately not set. Obsidian exposes interface, text and
+   monospace faces in Appearance settings, and a colour-and-shape theme has no
+   business overriding a choice the user already made. Only two typographic
+   behaviours are asserted, both carried over from the source for the same
+   reasons given there.
+
+   LIGHT ONLY. There is no newsprint dark palette to port, so `.theme-dark` is
+   left to Obsidian's defaults. Squared corners still apply in dark mode, since
+   those are set on `body`; the palette and the shadow removal do not.
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   SHAPE AND FLATNESS
+
+   Set on `body` rather than `.theme-light` because squared corners and the
+   absence of shadow are structural to the theme, not properties of the palette.
+
+   Removing shadow is not free: menus, modals and the quick switcher float above
+   content and were relying on it for separation. Each one gets a hairline
+   border below instead, which is how a printed page separates a box from the
+   text around it anyway.
+   ---------------------------------------------------------------------------- */
 body {
-	--radius-s: 0px;
+	--radius-s: 2px;
 	--radius-m: 0px;
 	--radius-l: 0px;
-	--input-radius: 0px;
+	--radius-xl: 0px;
+
+	/* Controls keep a 2px radius; containers go fully square. */
+	--input-radius: 2px;
+	--tab-radius: 0px;
 	--tab-radius-active: 0px;
-	--checkbox-radius: 0px;
+	--tab-curve: 0px;
+	--checkbox-radius: 2px;
 	--toggle-radius: 0px;
 	--toggle-thumb-radius: 0px;
 	--slider-thumb-radius: 0px;
+	--scrollbar-radius: 0px;
+	--image-radius: 0px;
+	--callout-radius: 0px;
+	--tag-radius: 2px;
+	--pill-radius: 2px;
+	--swatch-radius: 2px;
+	--status-bar-radius: 0px;
+	--metadata-property-radius: 2px;
+	--metadata-property-radius-hover: 2px;
+	--metadata-property-radius-focus: 2px;
+	--setting-items-radius: 0px;
+	--footnote-radius: 0px;
+
+	/* Flat. Depth cues become 1px rules. The generic `--shadow-*` scale and the
+	   input shadows are not here: Obsidian declares those inside `.theme-light`,
+	   which outranks a `body` selector, so they are overridden alongside the
+	   palette below. */
+	--modal-shadow: none;
+	--menu-shadow: none;
+	--tab-stacked-shadow: none;
+	--embed-actions-shadow: none;
+	--slider-thumb-shadow: none;
+	--slider-thumb-shadow-hover: none;
+	--slider-thumb-shadow-active: none;
+	--drag-item-shadow: 0 0 0 1px var(--background-modifier-border);
+	--pdf-shadow: 0 0 0 1px var(--background-modifier-border);
+	--pdf-spread-shadow: none;
+	--pdf-thumbnail-shadow: 0 0 0 1px var(--background-modifier-border);
+
+	/* The raised surface is the paper itself. Blur implies glass, which is the
+	   opposite of the material this theme is imitating. */
+	--raised-background: var(--background-primary);
+	--raised-blur: none;
+	--raised-shadow: none;
+
+	/* A callout is a boxed sidebar in print, so it is outlined rather than
+	   bled. Half opacity keeps the box subordinate to the body text. */
+	--callout-border-width: 1px;
+	--callout-border-opacity: 0.5;
+
+	/* Boxed labels rather than rounded chips. */
+	--tag-border-width: 1px;
+
+	/* Rules between paragraphs and table headers are thin and black on a
+	   printed page, not thick and grey. */
+	--hr-thickness: 1px;
 }
 
-.workspace-tab-header.is-active::before, .workspace-tab-header.is-active::after {
+/* Numbers are fixed-width. Carried over from the source: figures that update in
+   place jitter horizontally with proportional digits, and Obsidian puts live
+   word and character counts in the status bar. */
+body {
+	font-variant-numeric: tabular-nums;
+}
+
+/* Code and identifiers opt out of ligatures — `!=` and `=>` should read as the
+   characters they are, not as a glyph. */
+code,
+kbd,
+pre,
+samp {
+	font-variant-ligatures: none;
+}
+
+/* Honour the OS reduced-motion setting through Obsidian's own duration tokens,
+   which avoids blanket `!important` overrides that theme guidelines rule out.
+   Durations collapse to 1ms rather than 0 so `transitionend` still fires and
+   code waiting on it does not hang. */
+@media (prefers-reduced-motion: reduce) {
+	body {
+		--anim-duration-superfast: 1ms;
+		--anim-duration-fast: 1ms;
+		--anim-duration-moderate: 1ms;
+		--anim-duration-slow: 1ms;
+	}
+}
+
+/* ----------------------------------------------------------------------------
+   PALETTE
+
+   Obsidian derives most of its semantic colours from the `--color-base-*` ramp,
+   so retuning the ramp is what makes the newsprint palette reach parts of the
+   app no theme enumerates by hand. Semantic tokens are then overridden only
+   where the derivation gives the wrong answer for this palette.
+
+   Contrast measured against the editor page, `--color-base-00` (#d2cfc9):
+     text-normal  12.8:1     success  6.7:1
+     text-muted    8.3:1     danger   6.6:1
+     text-faint    4.4:1     warning  6.2:1
+   `text-faint` sits under 4.5:1, which is deliberate and still far ahead of
+   Obsidian's stock #ababab-on-white (2.5:1); it is only ever metadata.
+   ---------------------------------------------------------------------------- */
+.theme-light {
+	/* A rule that carries meaning stays a black hairline, as on a printed page.
+	   Used for horizontal rules, table header underlines, and the boundary of
+	   anything floating that lost its shadow. */
+	--newsprint-rule: #1a1a1a;
+
+	/* Surfaces, lightest to darkest. `base-00` is the source's `surface`, the
+	   page the note is set on; `base-20` is its `canvas`, which Obsidian spends
+	   on sidebars, the tab strip, the ribbon and the status bar. Nothing reaches
+	   white — an earlier version of the source used #f6f6f6 over #ffffff panels
+	   and read far too bright. */
+	--color-base-00: #d2cfc9;
+	--color-base-05: #cdcac4;
+	--color-base-10: #c6c3bd;
+	--color-base-20: #bbb9b4;
+	--color-base-25: #b2b0ab;
+
+	/* Rules. `base-30` is the default border, stepping darker through hover and
+	   focus. */
+	--color-base-30: #a4a29d;
+	--color-base-35: #9c9a95;
+	--color-base-40: #8f8d88;
+
+	/* Text. Three steps: metadata, secondary, content. Ink is unchanged from the
+	   source: toning the paper down costs nothing in legibility. */
+	--color-base-50: #5c5b57;
+	--color-base-60: #494844;
+	--color-base-70: #33322f;
+	--color-base-100: #0a0a0a;
+
+	/* Flat, continued. These live here rather than on `body` because Obsidian
+	   declares them inside `.theme-light`, which a `body` selector cannot beat.
+	   Inputs trade their shadow for the inset hairline that was already part of
+	   it, so a field still has an edge. */
+	--shadow-xs: none;
+	--shadow-s: none;
+	--shadow-l: none;
+	--background-modifier-box-shadow: transparent;
+	--input-shadow: inset 0 0 0 1px var(--background-modifier-border);
+	--input-shadow-hover: inset 0 0 0 1px var(--background-modifier-border-hover);
+
+	/* The accent is the ink. `--color-accent{,-1,-2}` are set to literals rather
+	   than left to derive from `--accent-h/s/l`, because Obsidian writes those
+	   three as an inline style on `body` when the user picks an accent colour in
+	   Appearance settings, and an inline style beats any stylesheet. Overriding
+	   the resolved colours is what actually holds the theme monochrome. The
+	   `--accent-*` values below still matter for the default case, and
+	   `--color-accent-hsl` covers the tokens that mix in HSL space.
+
+	   Hover goes DARKER, to pure black. Obsidian's derivation lightens instead,
+	   which on an ink accent would make hover recede. */
+	--accent-h: 0;
+	--accent-s: 0%;
+	--accent-l: 4%;
+	--color-accent: #0a0a0a;
+	--color-accent-1: #0a0a0a;
+	--color-accent-2: #000;
+	--color-accent-hsl: 0, 0%, 4%;
+
+	/* Hues, all pulled well down in lightness and chroma. Obsidian spends these
+	   on callouts, canvas cards, the graph and syntax highlighting — left at
+	   stock they would blast full-saturation colour across a monochrome theme.
+	   Red, orange and green are the source's danger, warning and success values
+	   verbatim; the rest are matched to them. Every one clears 4.5:1 on all
+	   three surfaces the theme uses, the code background included — which is
+	   what pulls the ochre this far down. */
+	--color-red: #7f1616;
+	--color-orange: #73320a;
+	--color-yellow: #5c430b;
+	--color-green: #024a35;
+	--color-cyan: #0f4a4a;
+	--color-blue: #1d3a63;
+	--color-purple: #402a55;
+	--color-pink: #6b1f45;
+
+	/* Triplets for the same hues. Callouts mix them with an alpha, so they cannot
+	   read the hex tokens above. */
+	--color-red-rgb: 127, 22, 22;
+	--color-orange-rgb: 115, 50, 10;
+	--color-yellow-rgb: 92, 67, 11;
+	--color-green-rgb: 2, 74, 53;
+	--color-cyan-rgb: 15, 74, 74;
+	--color-blue-rgb: 29, 58, 99;
+	--color-purple-rgb: 64, 42, 85;
+	--color-pink-rgb: 107, 31, 69;
+
+	/* Buttons and dropdowns step UP off the page instead of matching it, which
+	   is the one place the derivation fails: stock light maps `interactive` to
+	   `base-00`, and a control the same colour as the paper it sits on has no
+	   edge once the shadow is gone. */
+	--interactive-normal: var(--color-base-10);
+	--interactive-hover: var(--color-base-25);
+	--background-modifier-form-field: var(--color-base-10);
+
+	/* Selection is an ink wash rather than a tinted accent, since the accent is
+	   already ink. Kept light enough that text stays near its full contrast. */
+	--text-selection: color-mix(in oklch, var(--color-base-100) 18%, transparent);
+
+	/* Highlights are the second deliberate exception to the monochrome rule,
+	   after status colour. `==marked==` text has to be findable, and an ink wash
+	   would collide with selection. This is a printer's spot-colour ochre, not a
+	   highlighter yellow. */
+	--text-highlight-bg: color-mix(in oklch, var(--color-yellow) 35%, transparent);
+	--text-highlight-bg-rgb: 92, 67, 11;
+
+	/* Black hairlines where a boundary is load-bearing. */
+	--hr-color: var(--newsprint-rule);
+	--table-header-border-color: var(--newsprint-rule);
+	--menu-border-color: var(--newsprint-rule);
+	--modal-border-color: var(--newsprint-rule);
+	--prompt-border-color: var(--newsprint-rule);
+
+	/* Tables read as ruled columns: every cell bordered, header underlined in
+	   black, no zebra fill. */
+	--table-header-background: var(--background-primary);
+	--table-row-background-hover: var(--background-modifier-hover);
+
+	/* Boxed tag labels. `--tag-color` is ink rather than accent-as-ink so it
+	   stays correct if the accent is ever un-inked. */
+	--tag-color: var(--text-normal);
+	--tag-color-hover: var(--text-normal);
+	--tag-background: color-mix(in oklch, var(--color-base-100) 8%, transparent);
+	--tag-background-hover: color-mix(in oklch, var(--color-base-100) 16%, transparent);
+	--tag-border-color: color-mix(in oklch, var(--color-base-100) 30%, transparent);
+	--tag-border-color-hover: color-mix(in oklch, var(--color-base-100) 45%, transparent);
+
+	/* An unadorned grey, as the stock theme does, but on the newsprint ramp. */
+	--callout-quote: var(--color-base-60);
+
+	/* Syntax highlighting. This is the one place the theme spends more colour
+	   than the source appearance does: a code block is a printed listing, and
+	   fully monochrome highlighting costs real legibility in a vault that holds
+	   code. The hues are the retuned set above, so a listing reads as ink with a
+	   hint of colour rather than as a terminal. */
+	--code-normal: var(--text-normal);
+	--code-comment: var(--text-faint);
+	--code-punctuation: var(--text-faint);
+	--code-operator: var(--text-muted);
+	--code-keyword: var(--color-red);
+	--code-tag: var(--color-red);
+	--code-string: var(--color-green);
+	--code-function: var(--color-blue);
+	--code-property: var(--color-cyan);
+	--code-value: var(--color-yellow);
+	--code-important: var(--color-orange);
+
+	/* The graph is monochrome apart from the two node types Obsidian colours by
+	   kind, which stay distinguishable on the retuned hues. */
+	--graph-line: var(--color-base-35);
+}
+
+/* ----------------------------------------------------------------------------
+   STRUCTURE
+
+   The handful of places where a token cannot express the shape. Carried over
+   from the sample theme, which squares off the same details.
+   ---------------------------------------------------------------------------- */
+
+/* The active tab's rounded skirt is drawn with pseudo-elements, so zeroing
+   `--tab-curve` alone leaves it behind. */
+.workspace-tab-header.is-active::before,
+.workspace-tab-header.is-active::after {
 	display: none;
 }
 
+/* Icons are drawn, not printed, and their rounded joins are the loudest
+   remaining soft edge in the interface. */
 svg * {
 	stroke-linecap: square;
 	stroke-linejoin: miter;
@@ -21,6 +322,8 @@ svg * {
 	ry: 0;
 }
 
+/* Menus tighten up once the corners are square; the stock padding was sized for
+   a rounded container. */
 .menu {
 	padding: var(--size-2-1);
 }
