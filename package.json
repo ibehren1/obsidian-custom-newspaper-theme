@@ -1,15 +1,24 @@
 {
 	"name": "obsidian-newspaper-theme",
 	"version": "0.1.0",
-	"description": "A newspaper-inspired theme for Obsidian.",
+	"description": "A flat monochrome e-ink newspaper theme for Obsidian, built on Red Graphite.",
 	"license": "MIT",
 	"scripts": {
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
-		"lint": "stylelint \"**/*.css\"",
-		"lint:fix": "stylelint \"**/*.css\" --fix"
+		"dev": "grunt",
+		"build": "grunt build",
+		"build:ci": "grunt ci"
 	},
 	"devDependencies": {
-		"stylelint": "^17.0.0",
-		"stylelint-config-obsidianmd": "^0.1.0"
+		"dotenv": "^16.0.3",
+		"grunt": "^1.5.3",
+		"grunt-concat-css": "^0.3.2",
+		"grunt-contrib-copy": "^1.0.0",
+		"grunt-contrib-cssmin": "^4.0.0",
+		"grunt-contrib-watch": "^1.1.0",
+		"grunt-env": "^1.0.1",
+		"grunt-sass": "^3.1.0",
+		"rimraf": "^3.0.2",
+		"sass": "^1.80.4"
 	}
 }

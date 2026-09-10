@@ -1,0 +1,109 @@
+@use 'sass:map';
+
+// Lightness ramps.
+//
+// Red Graphite derives its whole palette from one HSL base color by walking
+// lightness away from it in 5% steps, which is why changing the base color in
+// Style Settings retints the entire theme. That curve is reproduced here as
+// `linear` so the newsprint curve can sit beside it as a peer rather than as a
+// special case.
+//
+// Both mixins emit the same 41 `--color-base-*` steps, so every component style
+// in `app/` and `plugins/` works unchanged under either.
+//
+// Values are assembled by interpolation rather than by calling Sass's own
+// `hsl()`, which cannot evaluate `var()` arguments.
+
+@function _step-name($step) {
+  @if $step < 10 {
+    @return '0#{$step}';
+  }
+
+  @return '#{$step}';
+}
+
+@function _base-color($offset) {
+  // Emitted as a subtraction rather than as `+ -20%`, which is valid but reads
+  // badly in the built file.
+  $l: 'calc(var(--theme-base-color-l) + #{$offset}%)';
+
+  @if $offset == 0 {
+    $l: 'var(--theme-base-color-l)';
+  } @else if $offset < 0 {
+    $l: 'calc(var(--theme-base-color-l) - #{-$offset}%)';
+  }
+
+  @return #{'hsl(var(--theme-base-color-h), var(--theme-base-color-s), ' + $l + ')'};
+}
+
+// Red Graphite's original curve: step 100 is the base color, and each 5 steps
+// away from it moves lightness 5% toward white (light theme, $sign: 1) or
+// toward black (dark theme, $sign: -1).
+@mixin linear($sign) {
+  @for $i from 0 through 40 {
+    $step: $i * 5;
+
+    --color-base-#{_step-name($step)}: #{_base-color($sign * (100 - $step))};
+  }
+}
+
+// The newsprint curve.
+//
+// A linear ramp cannot produce newsprint. Step 100 is the ink, and the page is
+// whatever sits 80 steps lighter — on the linear curve that is `base_l + 80%`,
+// which for any usable ink lands at or near pure white. Newsprint's whole point
+// is paper that never reaches white, so the light end has to be compressed
+// rather than extrapolated.
+//
+// The offsets below are tuned, not generated. Two constraints shape them and
+// they pull in opposite directions, because Red Graphite's light scheme spends
+// this one ramp on two jobs at once: the light end is both the page surfaces AND
+// the text drawn on the near-black chrome, while the dark end is both the ink on
+// the page AND the fills inside that chrome. That conflict is why the text roles
+// are remapped in `theme-newspaper.scss` instead of the curve being bent to fit
+// Red Graphite's choice of steps.
+//
+// Measured against the page (step 20) at the default ink lightness of 4%:
+//   text-normal (100)  12.8:1      nav item on chrome (40)   8.6:1
+//   text-muted   (80)   7.4:1      nav hover on chrome (00) 15.9:1
+//   text-faint   (70)   4.7:1
+$newsprint-offsets: (
+  0: 86,
+  5: 84,
+  10: 82,
+  15: 79.5,
+  20: 77,
+  25: 74,
+  30: 70,
+  35: 66,
+  40: 62,
+  45: 57,
+  50: 51,
+  55: 46,
+  60: 40,
+  65: 34,
+  70: 29,
+  75: 24,
+  80: 18,
+  85: 13,
+  90: 9,
+  95: 4,
+  100: 0,
+  105: -2,
+  110: -4,
+);
+
+@mixin newsprint {
+  @for $i from 0 through 40 {
+    $step: $i * 5;
+    // Past step 110 the curve has already bottomed out at black. Clamping there
+    // keeps the tail defined without inventing values below it.
+    $offset: map.get($newsprint-offsets, $step);
+
+    @if $offset == null {
+      $offset: -4;
+    }
+
+    --color-base-#{_step-name($step)}: #{_base-color($offset)};
+  }
+}

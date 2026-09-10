@@ -1,0 +1,28 @@
+@use 'ramps';
+
+.theme-light { 
+  // Set the values for the variable that gets set from the Style Settings plugin
+  // so that when you reset the color in the plugin, it will go back to this:
+  --red-graphite-accent-color-h: 2;
+  --red-graphite-accent-color-s: 56%;
+  --red-graphite-accent-color-l: 54%;
+
+  // Now we can set the variables built into obsidian using our values above or
+  // the values defined by a user in the Style Settings plugin
+  --accent-h: var(--red-graphite-accent-color-h);
+  --accent-s: var(--red-graphite-accent-color-s);
+  --accent-l: var(--red-graphite-accent-color-l);
+
+  // Start with our base color: #292C2E
+  // hsl(204, 6%, 17%)
+  // Then calculate LIGHTER versions of that in 5% increments all the way to white
+  --red-graphite-base-color-h: 204;
+  --red-graphite-base-color-s: 6%;
+  --red-graphite-base-color-l: 17%;
+
+  --theme-base-color-h: var(--red-graphite-base-color-h);
+  --theme-base-color-s: var(--red-graphite-base-color-s);
+  --theme-base-color-l: var(--red-graphite-base-color-l);
+
+  @include ramps.linear(1);
+}

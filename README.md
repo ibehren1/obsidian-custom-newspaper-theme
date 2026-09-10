@@ -1,109 +1,114 @@
 # Newspaper
 
-A newspaper-inspired theme for [Obsidian](https://obsidian.md).
+A flat monochrome e-ink theme for [Obsidian](https://obsidian.md), built on
+[Red Graphite](https://github.com/seanwcom/Red-Graphite-for-Obsidian).
 
-Flat monochrome newsprint: a toned paper ramp that never reaches white, near-black
-ink, squared corners, no shadows, and black hairline rules where a boundary carries
-meaning. The accent is the ink — links are underlined ink, active states are solid
-ink — so colour appears only where it means something.
+The document you edit is newsprint: a toned page that never reaches white,
+near-black ink, squared corners, no shadows, and black hairline rules where a
+boundary carries meaning. The accent is the ink — links are underlined ink,
+active states are solid ink — so colour appears only where it means something.
+The chrome around the page stays near-black, which is Red Graphite's own
+arrangement and suits newsprint well: the page reads as a sheet on a desk.
 
-**Light mode only.** There is no newsprint dark palette, so dark mode falls back to
-Obsidian's defaults (squared corners still apply).
+Typography is left alone. The theme sets colour and shape; fonts come from
+Red Graphite's Style Settings text fields or from Obsidian's Appearance settings.
 
-Typography is left alone. The theme sets colour and shape; `--font-text`,
-`--font-interface` and `--font-monospace` stay whatever you picked in
-**Appearance settings**.
+**Light mode is the newspaper scheme. Dark mode is Red Graphite's**, unchanged —
+there is no newsprint dark palette.
 
-## Palette provenance
+## Installation
 
-The palette is ported from the `newspaper` appearance of another project. That
-project's original token block is kept verbatim at
-[`reference/newspaper-palette.css`](reference/newspaper-palette.css) so the reasoning
-behind each value stays readable. It is excluded from linting — it is a reference
-document, not shipped CSS.
+Not yet in the community directory. To install manually, copy `manifest.json` and
+`theme.css` into `<vault>/.obsidian/themes/Newspaper/`, then pick **Newspaper** in
+**Settings → Appearance → Themes**.
 
-The port is not a copy. The source palette dresses a dense application chrome where
-content sits on raised panels above the window background; Obsidian's main surface is
-a reading column. So the source's `surface` (`#d2cfc9`) became the editor page and its
-`canvas` (`#bbb9b4`) dropped back to the sidebars, preserving the relationship rather
-than the variable names.
+## Style Settings
 
-Two deliberate departures from the source's strict monochrome:
+With the [Style Settings](https://github.com/mgmeyers/obsidian-style-settings)
+plugin installed you get:
 
-- **Syntax highlighting** uses six low-chroma dark hues. Fully monochrome highlighting
-  costs real legibility in a vault holding code; these read as ink with a hint of
-  colour rather than as a terminal.
-- **`==Highlights==`** use a printer's spot-colour ochre. An ink wash would collide
-  with text selection.
+- **Use Red Graphite's original light scheme** — off by default. Turning it on adds
+  the `rg-classic-scheme` class, which drops the entire newspaper block out and
+  leaves the scheme this theme was forked from in force: near-white page, red
+  accent, rounded and shadowed components.
+- **Base Color** — in the newspaper scheme this is the **ink**, and the paper is
+  derived from it. Changing hue or saturation retints the paper; changing lightness
+  moves ink and paper together.
+- **Accent Color** — ink by default. Unlike Red Graphite, the newspaper scheme
+  reads this setting directly rather than through `--accent-h/s/l`, so it keeps
+  working even after you've set an accent in Appearance settings.
+- Interface, text and monospace fonts.
 
-All palette colours clear 4.5:1 contrast on every surface the theme uses, including
-the code block background. `--text-faint` is the one exception (4.4:1 on the page),
-which is still far ahead of Obsidian's stock `#ababab`-on-white at 2.5:1.
+## How the newspaper scheme works
 
-## Status
+Red Graphite derives its whole palette from one HSL base color, walking lightness
+away from it in 5% steps. **That curve cannot produce newsprint.** The page sits 80
+steps from the ink, which on a linear ramp is `base_l + 80%` — at or near pure
+white for any usable ink. Newsprint's defining trait is paper that never reaches
+white, so the light end of the ramp has to be compressed rather than extrapolated.
 
-Palette and token coverage are complete: surfaces, ink, rules, accent, shape,
-syntax highlighting, callouts, tags, tables, graph view, and selection. Not yet
-reviewed against every view (PDF, Canvas, Bases, mobile).
+So the scheme is a second ramp, not a different base color. Both live in
+[`src/scss/themes/_ramps.scss`](src/scss/themes/_ramps.scss): `linear` is Red
+Graphite's original curve, refactored out of its two theme files and verified to
+emit byte-identical declarations, and `newsprint` is the tuned one.
 
-## Local development
+The tuning is constrained from two directions at once, because Red Graphite's
+light scheme spends this single ramp on two jobs: its light end is both the page
+surfaces **and** the text drawn on the near-black chrome, while its dark end is
+both the ink on the page **and** the fills inside that chrome. Rather than bend the
+curve to fit, [`theme-newspaper.scss`](src/scss/themes/theme-newspaper.scss) remaps
+the roles that land on the wrong step — text drops one step darker, borders move
+from step 30 to 40, and every accent-coloured cue sitting on the dark chrome
+(vault name, sidebar icons, nav fills, collapse arrows) moves to the paper end,
+since ink-on-ink is invisible. That last group is the price of ink-as-accent, and
+it is paid there rather than by compromising the accent.
 
-Obsidian loads themes from `<vault>/.obsidian/themes/<Theme Name>/`. Symlink this
-repo into a vault so edits show up live:
+Measured against the page at the default ink lightness:
+
+| Role | Step | Contrast |
+| --- | --- | --- |
+| `text-normal` | 100 | 12.8:1 |
+| `text-muted` | 80 | 7.4:1 |
+| `text-faint` | 70 | 4.7:1 |
+| nav item on chrome | 40 | 8.6:1 |
+| nav hover on chrome | 00 | 15.9:1 |
+
+The palette values are ported from the `newspaper` appearance of another project.
+That project's original token block is kept at
+[`reference/newspaper-palette.css`](reference/newspaper-palette.css) for the
+reasoning behind each value.
+
+## Development
+
+Copy `.env.example` to `.env` and point `OBSIDIAN_PATH` at a vault's theme folder,
+so the build can copy the result straight in.
 
 ```bash
-ln -s "$(pwd)" "/path/to/vault/.obsidian/themes/Newspaper"
+npm install
+npm run dev     # watch src/, rebuild, copy into the vault
+npm run build   # build and copy once
+npm run build:ci  # compile only, no .env and no copy
 ```
 
-Then in Obsidian: **Settings → Appearance → Themes → Newspaper**.
-
-Reload styles after each edit with the **Reload app without saving** command, or
-install the [Hot Reload](https://github.com/pjeby/hot-reload) plugin for automatic
-refresh.
-
-Files Obsidian actually reads:
-
-- `manifest.json` — theme name, version, author, `minAppVersion`
-- `theme.css` — the entire theme; all CSS lives here
-
-## Linting
-
-CSS is checked against [`stylelint-config-obsidianmd`](https://github.com/obsidianmd/stylelint-config),
-the same rule set used during Obsidian's theme review.
-
-```bash
-npm install   # once
-npm run lint
-npm run lint:fix
-```
-
-Linting also runs on every push and pull request via `.github/workflows/lint.yml`.
+`theme.css` is generated from `src/` and **is** committed, since Obsidian installs
+it directly. Never edit it by hand — CI rebuilds and fails if the committed copy is
+stale.
 
 ## Releasing
 
-1. Bump the version: `npm version <patch|minor|major>`. This runs
-   `version-bump.mjs`, which syncs `manifest.json` and adds a `versions.json`
-   entry mapping the new theme version to `minAppVersion`.
-2. Push the commit and the tag: `git push && git push --tags`.
-3. `.github/workflows/release.yml` creates a **draft** GitHub release with
-   `manifest.json` and `theme.css` attached. Review it, then publish.
+1. `npm version <patch|minor|major>` — runs `version-bump.mjs`, syncing
+   `manifest.json` and adding a `versions.json` entry.
+2. `git push && git push --tags`.
+3. `.github/workflows/release.yml` creates a **draft** release with `manifest.json`
+   and `theme.css` attached. Review, then publish.
 
-Obsidian downloads `manifest.json` and `theme.css` from the release whose tag
-matches the version in `manifest.json`, so the release must be published for
-installs to work.
+## Credits
 
-## Community directory submission
-
-Needed before submitting to [community.obsidian.md](https://community.obsidian.md):
-
-- A published release (see above).
-- A `screenshots/screenshot.png` thumbnail, 16:9, recommended 512x288.
-- A `LICENSE` file (MIT, included).
-- A clean `npm run lint`.
-- **Supported modes: Light** only, on the submission form.
-
-See the official [Submit your theme](https://docs.obsidian.md/Themes/App+themes/Submit+your+theme)
-guide and the [Theme guidelines](https://docs.obsidian.md/Themes/App+themes/Theme+guidelines).
+Forked from [Red Graphite for Obsidian](https://github.com/seanwcom/Red-Graphite-for-Obsidian)
+by Sean Williams, which is released into the public domain under the Unlicense and
+which in turn takes its colours from Bear.app's Red Graphite theme. The SCSS layout,
+Grunt build and every `app/` and `plugins/` component style are Sean's work; the
+newspaper ramp and scheme are the additions here.
 
 ## License
 

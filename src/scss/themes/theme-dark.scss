@@ -1,0 +1,28 @@
+@use 'ramps';
+
+.theme-dark {
+  // Set the values for the variable that gets set from the Style Settings plugin
+  // so that when you reset the color in the plugin, it will go back to this:
+  --red-graphite-accent-color-h: 41;
+  --red-graphite-accent-color-s: 88%;
+  --red-graphite-accent-color-l: 71%;
+
+  // Now we can set the variables built into obsidian using our values above or
+  // the values defined by a user in the Style Settings plugin
+  --accent-h: var(--red-graphite-accent-color-h);
+  --accent-s: var(--red-graphite-accent-color-s);
+  --accent-l: var(--red-graphite-accent-color-l);
+
+  // Start with our base color: #1e232f
+  // hsl(222, 22%, 15%)
+  // Then calculate DARKER versions of that in 5% increments all the way to black
+  --red-graphite-base-color-h: 222;
+  --red-graphite-base-color-s: 22%;
+  --red-graphite-base-color-l: 15%;
+
+  --theme-base-color-h: var(--red-graphite-base-color-h);
+  --theme-base-color-s: var(--red-graphite-base-color-s);
+  --theme-base-color-l: var(--red-graphite-base-color-l);
+
+  @include ramps.linear(-1);
+}

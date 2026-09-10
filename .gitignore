@@ -13,3 +13,10 @@ node_modules
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
+
+# Local vault path for the Grunt copy step
+.env
+
+# Intermediate build output. theme.css IS committed; this is the stage before it.
+src/css/red-graphite.min.css
+.sass-cache

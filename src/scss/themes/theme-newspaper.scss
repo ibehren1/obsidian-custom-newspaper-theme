@@ -1,0 +1,275 @@
+@use 'ramps';
+
+// NEWSPAPER — flat monochrome, e-ink / letterpress.
+//
+// This is the theme's light appearance. It replaces Red Graphite's light scheme
+// by outranking it: `.theme-light:not(.rg-classic-scheme)` is one class more
+// specific than the `.theme-light` blocks in `theme-light.scss` and `app/`, so
+// everything declared here wins, and adding the `rg-classic-scheme` class
+// through Style Settings drops this whole block out and leaves Red Graphite's
+// original light scheme in force. No values have to be restored by hand.
+//
+// Two rules govern the palette:
+//
+//   1. Newsprint, not office paper. Nothing on the page reaches white, and the
+//      whole ramp carries the faintest warm cast — held low, because at this
+//      chroma it reads as paper and pushing further tips into sepia.
+//   2. The accent IS the ink. Links are underlined ink, active states are solid
+//      ink, and colour appears only where it carries meaning.
+//
+// Red Graphite's structure is kept, including its most distinctive decision:
+// in light mode the chrome is near-black while the document is light. That suits
+// newsprint well — the page reads as a sheet on a desk — but it means the ramp's
+// light end does double duty as text on that chrome, which is what most of the
+// remapping below is about.
+//
+// The palette values are ported from the `newspaper` appearance of another
+// project; the original token block is kept at reference/newspaper-palette.css
+// for the reasoning behind each one.
+.theme-light:not(.rg-classic-scheme) {
+  // Style Settings writes to these two, so they carry the defaults that
+  // "reset" returns to, exactly as Red Graphite's own schemes do.
+  --red-graphite-base-color-h: 42;
+  --red-graphite-base-color-s: 7%;
+  --red-graphite-base-color-l: 4%;
+
+  --red-graphite-accent-color-h: 0;
+  --red-graphite-accent-color-s: 0%;
+  --red-graphite-accent-color-l: 4%;
+
+  --theme-base-color-h: var(--red-graphite-base-color-h);
+  --theme-base-color-s: var(--red-graphite-base-color-s);
+  --theme-base-color-l: var(--red-graphite-base-color-l);
+
+  --accent-h: var(--red-graphite-accent-color-h);
+  --accent-s: var(--red-graphite-accent-color-s);
+  --accent-l: var(--red-graphite-accent-color-l);
+
+  // The base color is the INK, and the ramp climbs from it to the paper.
+  // Changing hue or saturation in Style Settings retints the paper; changing
+  // lightness moves the ink and the paper together.
+  @include ramps.newsprint;
+
+  // The resolved accent colours are built from the Style Settings variables
+  // rather than from `--accent-h/s/l`. Obsidian writes those three as an inline
+  // style on `body` the moment a user picks an accent in Appearance settings, and
+  // an inline style beats any stylesheet — which is the caveat Red Graphite
+  // documents in its own Style Settings description. Reading the theme's own
+  // variables instead keeps the accent monochrome by default AND keeps the Style
+  // Settings colour working.
+  //
+  // Hover goes DARKER. Obsidian's own derivation lightens instead, which on an
+  // ink accent would make hover recede.
+  --color-accent: hsl(
+    var(--red-graphite-accent-color-h),
+    var(--red-graphite-accent-color-s),
+    var(--red-graphite-accent-color-l)
+  );
+  --color-accent-1: var(--color-accent);
+  --color-accent-2: hsl(
+    var(--red-graphite-accent-color-h),
+    var(--red-graphite-accent-color-s),
+    calc(var(--red-graphite-accent-color-l) - 4%)
+  );
+  --color-accent-hsl: var(--red-graphite-accent-color-h), var(--red-graphite-accent-color-s),
+    var(--red-graphite-accent-color-l);
+
+  // --- Page -----------------------------------------------------------------
+  //
+  // Red Graphite maps the page to step 20 and the code background to step 00,
+  // so a code block sits slightly LIGHTER than the paper around it, like an
+  // inset panel. Both are inherited; only the border needs moving.
+  //
+  // Borders go to step 40 rather than Red Graphite's step 30. On the linear
+  // curve step 30 is 30% away from the ink and reads clearly; on the compressed
+  // newsprint curve it is only 7 points off the page and disappears.
+  --background-modifier-border: var(--color-base-40);
+  --background-modifier-border-hover: var(--color-base-45);
+  --background-modifier-border-focus: var(--color-base-50);
+
+  // Text drops one step darker than Red Graphite's mapping. Its steps were
+  // picked against a linear ramp, where step 70 is 30% off the ink; here step 70
+  // is 29 points off the PAPER, which would leave muted text at 4.7:1.
+  --text-muted: var(--color-base-80);
+  --text-faint: var(--color-base-70);
+
+  // Red Graphite points both of these at step 00, so a dropdown or button has no
+  // hover state at all. One step is enough to feel on paper.
+  --interactive-hover: var(--color-base-10);
+
+  // --- Chrome ---------------------------------------------------------------
+  //
+  // Every accent-coloured cue in Red Graphite's light scheme sits on the
+  // near-black chrome — the vault name, sidebar icons, nav item fills, collapse
+  // arrows. An ink accent on ink chrome is invisible, so each one is remapped to
+  // the paper end of the ramp. This is the cost of ink-as-accent, and it is paid
+  // here rather than by compromising the accent.
+  // Obsidian renamed the vault name block to `--vault-profile-*` and Red Graphite
+  // still sets the old `--vault-name-color`, which no longer resolves to
+  // anything. The live token defaults to `--text-normal`, which in this scheme is
+  // the same ink as the chrome behind it — so the vault name is invisible until
+  // it is pointed at the paper end of the ramp. Red Graphite's own light scheme
+  // has the same problem; this fixes it only here.
+  --vault-profile-color: var(--color-base-40);
+  --vault-profile-color-hover: var(--color-base-00);
+
+  --icon-color-hover: var(--color-base-00);
+  --icon-color-active: var(--color-base-00);
+  --icon-color-focused: var(--color-base-00);
+  --nav-item-background-hover: var(--color-base-80);
+  --nav-item-background-active: var(--color-base-75);
+  --nav-collapse-icon-color: var(--color-base-40);
+  --nav-collapse-icon-color-collapsed: var(--color-base-40);
+
+  // The status bar is dark chrome (its background inherits the near-black
+  // divider colour), but its text defaults to `--text-muted`, which this scheme
+  // sets to dark ink for the page. Dark on dark is unreadable, so the status bar
+  // text is pulled back to the light end of the ramp like the other chrome text.
+  --status-bar-text-color: var(--color-base-40);
+
+  // List markers live on the page, so they stay ink — just not full-strength
+  // ink, which would compete with the text beside them.
+  --list-marker-color: var(--color-base-70);
+
+  // Menus and the quick switcher are dark chrome in this scheme too, so their
+  // selected row cannot be the ink accent either — ink on the near-black menu is
+  // invisible. These are element rules in `app/menu.scss` and
+  // `app/suggestion-dropdown.scss` rather than tokens, so they are answered in
+  // kind with a grey step off the chrome. Red Graphite keeps the light text
+  // colour it already sets on these, so only the fill is replaced.
+  //
+  // The suggestion selector is deliberately as deep as Red Graphite's
+  // (`.suggestion-container .suggestion .suggestion-item.is-selected`) plus the
+  // scheme's own `:not(.rg-classic-scheme)`, so it outranks it. A shorter
+  // selector loses and the accent fill wins, which is the invisible state.
+  .menu-item:hover:not(.is-disabled):not(.is-label),
+  .menu-item.selected:not(.is-disabled):not(.is-label) {
+    background-color: var(--color-base-80);
+  }
+
+  .suggestion-container .suggestion .suggestion-item.is-selected {
+    background-color: var(--color-base-80);
+  }
+
+  // --- Ink rules ------------------------------------------------------------
+  //
+  // A rule that carries meaning is a black hairline, as on a printed page: the
+  // divider between paragraphs, the underline beneath a table header, and the
+  // boundary of anything that floats and has lost its shadow.
+  --hr-color: var(--color-base-100);
+  --hr-thickness: 1px;
+  --table-header-border-color: var(--color-base-100);
+
+  // --- E-ink shape ----------------------------------------------------------
+  //
+  // Square and flat. Scoped to this scheme so Red Graphite's own appearances
+  // keep their radii.
+  --radius-s: 2px;
+  --radius-m: 0px;
+  --radius-l: 0px;
+  --radius-xl: 0px;
+  --input-radius: 2px;
+  --tab-radius: 0px;
+  --tab-radius-active: 0px;
+  --tab-curve: 0px;
+  --checkbox-radius: 2px;
+  --toggle-radius: 0px;
+  --toggle-thumb-radius: 0px;
+  --slider-thumb-radius: 0px;
+  --scrollbar-radius: 0px;
+  --image-radius: 0px;
+  --callout-radius: 0px;
+  --tag-radius: 2px;
+  --pill-radius: 2px;
+  --swatch-radius: 2px;
+  --status-bar-radius: 0px;
+  --metadata-property-radius: 2px;
+  --metadata-property-radius-hover: 2px;
+  --metadata-property-radius-focus: 2px;
+  --setting-items-radius: 0px;
+  --footnote-radius: 0px;
+
+  --shadow-xs: none;
+  --shadow-s: none;
+  --shadow-l: none;
+  --modal-shadow: none;
+  --menu-shadow: none;
+  --tab-stacked-shadow: none;
+  --embed-actions-shadow: none;
+  --slider-thumb-shadow: none;
+  --slider-thumb-shadow-hover: none;
+  --slider-thumb-shadow-active: none;
+  --background-modifier-box-shadow: transparent;
+  --pdf-spread-shadow: none;
+  --drag-item-shadow: 0 0 0 1px var(--background-modifier-border);
+  --pdf-shadow: 0 0 0 1px var(--background-modifier-border);
+  --pdf-thumbnail-shadow: 0 0 0 1px var(--background-modifier-border);
+
+  // Inputs trade their shadow for the inset hairline that was already part of
+  // it, so a field keeps an edge.
+  --input-shadow: inset 0 0 0 1px var(--background-modifier-border);
+  --input-shadow-hover: inset 0 0 0 1px var(--background-modifier-border-hover);
+
+  // Blur implies glass, which is the opposite of the material being imitated.
+  --raised-background: var(--background-primary);
+  --raised-blur: none;
+  --raised-shadow: none;
+
+  // A callout is a boxed sidebar in print, so it is outlined rather than bled.
+  --callout-border-width: 1px;
+  --callout-border-opacity: 0.5;
+
+  // Boxed labels rather than rounded chips.
+  --tag-border-width: 1px;
+
+  // Red Graphite rounds the scrollbar thumb with a literal value, which no token
+  // reaches.
+  ::-webkit-scrollbar-thumb {
+    border-radius: 0;
+  }
+
+  // Icons are drawn rather than printed, and their rounded joins are the loudest
+  // soft edge left once the corners are square.
+  svg * {
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    rx: 0;
+    ry: 0;
+  }
+
+  // The active tab's rounded skirt is drawn with pseudo-elements, so zeroing
+  // `--tab-curve` alone leaves it behind.
+  .workspace-tab-header.is-active::before,
+  .workspace-tab-header.is-active::after {
+    display: none;
+  }
+}
+
+// Numbers are fixed-width. Figures that update in place jitter horizontally with
+// proportional digits, and Obsidian keeps live word and character counts in the
+// status bar.
+.theme-light:not(.rg-classic-scheme) {
+  font-variant-numeric: tabular-nums;
+
+  // Code and identifiers opt back out of ligatures — `!=` and `=>` should read
+  // as the characters they are, not as a glyph.
+  code,
+  kbd,
+  pre,
+  samp {
+    font-variant-ligatures: none;
+  }
+}
+
+// Honour the OS reduced-motion setting through Obsidian's own duration tokens,
+// which avoids the blanket `!important` overrides that theme guidelines rule out.
+// Durations collapse to 1ms rather than 0 so `transitionend` still fires and code
+// waiting on it does not hang.
+@media (prefers-reduced-motion: reduce) {
+  body {
+    --anim-duration-superfast: 1ms;
+    --anim-duration-fast: 1ms;
+    --anim-duration-moderate: 1ms;
+    --anim-duration-slow: 1ms;
+  }
+}

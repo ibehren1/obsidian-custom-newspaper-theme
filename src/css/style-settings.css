@@ -1,0 +1,76 @@
+/* @settings
+
+name: Newspaper
+id: newspaper
+settings:
+
+- id: newspaper-scheme
+  title: Light appearance
+  type: heading
+  level: 2
+  collapsed: false
+
+- id: rg-classic-scheme
+  title: Use Red Graphite's original light scheme
+  description: |
+    Off by default, which gives you the newspaper scheme: a toned newsprint page that never reaches white, near-black ink, squared corners and no shadows.
+    Turn this on to get the light scheme this theme was forked from — a near-white page with a red accent, and rounded, shadowed components.
+    Dark mode is Red Graphite's either way.
+  type: class-toggle
+  default: false
+
+- id: red-graphite-colors
+  title: Colors
+  type: heading
+  level: 2
+  collapsed: false
+
+- id: red-graphite-base-color
+  title: Base Color
+  description: |
+    This sets the base color that many other colors are derived from.
+    In the newspaper scheme this base color is the INK, and the paper is derived from it: changing the hue or saturation retints the paper, and changing the lightness moves the ink and the paper together. Note that the newspaper scheme compresses the light end of that ramp, which is what keeps the page off white.
+    Note that Red Graphite's light scheme defaults to a contrast of darker side panels. Those darker panels are what you are changing here. However, with the dark theme, you will be adjusting the entire theme. Try some changes to see how it looks.
+  type: variable-themed-color
+  format: hsl-split
+  opacity: false
+  default-light: '#0b0a09'
+  default-dark: '#1e232f'
+
+- id: red-graphite-accent-color
+  title: Accent Color
+  description: |
+    In the newspaper scheme the accent is the ink, which is what keeps the theme monochrome — links are underlined ink and active states are solid ink. In Red Graphite's original light scheme this is the red highlight, and in the dark theme it is the yellow highlight.
+    This can also be adjusted in the Appearance settings section, but changing it there will override this setting. You will have to reset that color for this one to work.
+  type: variable-themed-color
+  format: hsl-split
+  opacity: false
+  default-light: '#0a0a0a'
+  default-dark: '#f6cd74'
+
+
+
+- id: red-graphite-fonts
+  title: Fonts
+  type: heading
+  level: 2
+  collapsed: false
+
+- id: red-graphite-interface-font
+  title: Interface font
+  description: Font used for the user interface
+  type: variable-text
+  default: "'Avenir'"
+
+- id: red-graphite-text-font
+  title: Text font
+  description: Font used for text
+  type: variable-text
+  default: "'Avenir'"
+
+- id: red-graphite-monospace-font
+  title: Monospace font
+  description: Font used for monospace text
+  type: variable-text
+  default: ''
+*/
