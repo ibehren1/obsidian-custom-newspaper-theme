@@ -37,6 +37,10 @@ plugin installed you get:
 - **Accent Color** — ink by default. Unlike Red Graphite, the newspaper scheme
   reads this setting directly rather than through `--accent-h/s/l`, so it keeps
   working even after you've set an accent in Appearance settings.
+- **Flatten ink** — the document text is mottled by default, the way a press lays
+  ink down unevenly so the paper bleeds through the letterforms. Turn this on for
+  flat, even ink.
+- **Ink unevenness** — how far the paper bleeds through (0 = flat).
 - Interface, text and monospace fonts.
 
 ## How the newspaper scheme works

@@ -109,6 +109,11 @@
   // hover state at all. One step is enough to feel on paper.
   --interactive-hover: var(--color-base-10);
 
+  // How far the paper bleeds through the ink in the uneven-ink overlay
+  // (app/newsprint-ink.scss). Set here so it has a default without Style
+  // Settings; the plugin exposes it as a slider.
+  --newsprint-mottle-opacity: 0.55;
+
   // --- Chrome ---------------------------------------------------------------
   //
   // Every accent-coloured cue in Red Graphite's light scheme sits on the

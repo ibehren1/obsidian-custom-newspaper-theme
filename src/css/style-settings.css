@@ -19,6 +19,22 @@ settings:
   type: class-toggle
   default: false
 
+- id: disable-newsprint-mottle
+  title: Flatten ink (disable uneven newsprint texture)
+  description: |
+    By default the newspaper scheme mottles the document text, the way a press lays ink down unevenly so the paper bleeds through the letterforms. Turn this on for flat, even ink. No effect in Red Graphite's classic scheme or in dark mode.
+  type: class-toggle
+  default: false
+
+- id: newsprint-mottle-opacity
+  title: Ink unevenness
+  description: How far the paper bleeds through the ink. 0 is flat even ink; higher lets more paper show through.
+  type: variable-number-slider
+  default: 0.55
+  min: 0
+  max: 1
+  step: 0.05
+
 - id: red-graphite-colors
   title: Colors
   type: heading

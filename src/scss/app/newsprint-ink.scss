@@ -1,0 +1,44 @@
+// UNEVEN NEWSPRINT INK
+//
+// Real newsprint lays ink down unevenly: some strokes are solid, others are
+// starved and the paper bleeds through the letterforms. This overlays a fine
+// fractal-noise texture on the document and blends it with `mix-blend-mode:
+// lighten`, which can only lift the dark ink toward the paper in mottled patches
+// and can never darken the paper — so the page stays clean and only the ink
+// varies. The noise is a self-contained SVG `feTurbulence`, so nothing is
+// fetched and it renders identically offline.
+//
+// The blend needs the paper as its backdrop to work: `lighten(paper, noise)`
+// leaves the paper alone because the paper is brighter than the noise, while
+// `lighten(ink, noise)` lifts the ink. So the paper background is painted onto
+// the same isolated element the overlay sits on — without that isolation the
+// blend would reach the app chrome behind the page and mottle it too.
+//
+// Applies only in the newspaper scheme (light, not rg-classic). It is on for
+// everyone by default; the `disable-newsprint-mottle` Style Settings toggle adds
+// the class that switches it off, and `--newsprint-mottle-opacity` sets how far
+// the paper bleeds through.
+body:not(.disable-newsprint-mottle) {
+  .theme-light:not(.rg-classic-scheme) {
+    .markdown-preview-view .markdown-preview-sizer,
+    .markdown-source-view.mod-cm6 .cm-content {
+      position: relative;
+      isolation: isolate;
+      background-color: var(--background-primary);
+    }
+
+    .markdown-preview-view .markdown-preview-sizer::before,
+    .markdown-source-view.mod-cm6 .cm-content::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      // The overlay must never intercept clicks, the caret, or text selection.
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='1.1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 220px 220px;
+      mix-blend-mode: lighten;
+      opacity: var(--newsprint-mottle-opacity, 0.55);
+    }
+  }
+}
