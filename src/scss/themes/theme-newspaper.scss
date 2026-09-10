@@ -89,12 +89,15 @@
 
   // Body text is faded ink, not the full-strength ramp end. Real newsprint ink
   // is a warm charcoal that has soaked into the paper, so `--text-normal` is the
-  // ink mixed a little way toward the page rather than `--color-base-100` flat:
-  // that both lightens it and pulls it toward the paper's warmth. Mixed against
+  // ink mixed toward the page rather than `--color-base-100` flat: that both
+  // lightens it and pulls it toward the paper's warmth. Mixed against
   // `--background-primary` so it tracks the page if the base colour is retuned in
-  // Style Settings. ~10:1 on the page — softened, still crisp, and still clear of
-  // muted below it.
-  --text-normal: color-mix(in oklch, var(--color-base-100) 87%, var(--background-primary));
+  // Style Settings. At 70% ink this is a heavy fade, ~6:1 on the page.
+  //
+  // NOTE: at this strength body text is lighter than `--text-muted` (~8.6:1)
+  // below, so secondary text reads heavier than primary. Raise the ink share
+  // (~85%+) to keep the normal > muted > faint order.
+  --text-normal: color-mix(in oklch, var(--color-base-100) 70%, var(--background-primary));
 
   // Muted and faint drop one step darker than Red Graphite's mapping. Its steps
   // were picked against a linear ramp, where step 70 is 30% off the ink; here
