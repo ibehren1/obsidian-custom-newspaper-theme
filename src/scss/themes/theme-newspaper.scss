@@ -199,7 +199,12 @@
   // the ink accent, invisible on dark) are the pieces that have to be restated
   // here, along with the tree/search text.
   .workspace-split.mod-left-split {
+    // Kept dark because the File Color plugin's per-folder hues are tuned to read
+    // against it; flipping this to paper would wash them out and re-picking every
+    // colour is not worth it. A crisp ink edge makes the rail read as a deliberate
+    // index alongside the light chrome rather than a leftover dark panel.
     background-color: var(--color-base-100);
+    border-inline-end: 1px solid var(--color-base-100);
     --background-secondary: var(--color-base-100);
     --background-secondary-alt: var(--color-base-95);
     --divider-color: var(--color-base-95);
