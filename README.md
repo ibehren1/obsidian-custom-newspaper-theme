@@ -3,6 +3,8 @@
 A flat monochrome e-ink theme for [Obsidian](https://obsidian.md), built on
 [Red Graphite](https://github.com/seanwcom/Red-Graphite-for-Obsidian).
 
+![Newspaper in light mode](screenshots/light.png)
+
 The document you edit is newsprint: a toned page that never reaches white,
 near-black ink, squared corners, no shadows, and black hairline rules where a
 boundary carries meaning. The accent is the ink — links are underlined ink,
@@ -22,6 +24,8 @@ Red Graphite's Style Settings text fields or from Obsidian's Appearance settings
 
 **Light mode is the newspaper scheme. Dark mode is Red Graphite's**, unchanged —
 there is no newsprint dark palette.
+
+![Dark mode, Red Graphite's scheme](screenshots/dark.png)
 
 ## Installation
 
