@@ -20,7 +20,7 @@ module.exports = function (grunt) {
         options: {
           implementation: require('sass'),
           sourceMap: false,
-          outputStyle: 'compressed'
+          style: 'compressed'
         },
         files: {
           'src/css/red-graphite.min.css': 'src/scss/index.scss'
