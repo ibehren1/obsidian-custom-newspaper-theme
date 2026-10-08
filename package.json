@@ -10,7 +10,7 @@
 		"build:ci": "grunt ci"
 	},
 	"devDependencies": {
-		"dotenv": "^17.4.2",
+		"dotenv": "^18.0.5",
 		"grunt": "^1.5.3",
 		"grunt-concat-css": "^0.3.2",
 		"grunt-contrib-copy": "^1.0.0",
