@@ -111,7 +111,13 @@ stale.
 
 ## Releasing
 
-1. On a branch, `npm version <patch|minor|major> --no-git-tag-version` — runs
+**Every change to the theme bumps the patch version** (z in x.y.z) by one, so
+every merged theme change ships as its own release. A change to the theme is
+any change under `src/` or to `theme.css`. CI enforces this on pull requests with
+[`check-version.mjs`](check-version.mjs), which also accepts a minor or major
+bump and checks `manifest.json`, `package.json` and `versions.json` agree.
+
+1. On a branch, `npm version patch --no-git-tag-version` — runs
    `version-bump.mjs`, syncing `manifest.json` and adding a `versions.json` entry.
 2. Commit, open a PR and merge it into `main`.
 3. `.github/workflows/release.yml` sees a `manifest.json` version with no release
