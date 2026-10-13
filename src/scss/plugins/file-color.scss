@@ -11,14 +11,22 @@
 // unit), turned into a percentage with `calc(... * 1%)` for color-mix. The active
 // file is skipped so its selection bar still shows through. Light scheme only —
 // the dark classic scheme keeps the plugin's own 15%.
-.theme-light:not(.rg-classic-scheme) {
-  // `!important` because File Color applies its baked 15% background with a rule
-  // this cannot otherwise outrank (confirmed: without it the chip stays at 0.15).
-  .file-color-type-background .tree-item-self:not(.is-active) {
+//
+// The plugin's own rules are 6 classes deep (7 with cascade), which outranks a
+// short selector. Rather than `!important`, they are repeated here under the
+// scheme prefix, which puts this one class pair ahead in both cases.
+.theme-light:not(.rg-classic-scheme)
+  .workspace-leaf-content[data-type="file-explorer"]
+  .nav-files-container
+  .file-color-file.file-color-type-background {
+  > .nav-folder-title:not(.is-active),
+  > .nav-file-title:not(.is-active),
+  &.file-color-cascade .nav-folder-title:not(.is-active),
+  &.file-color-cascade .nav-file-title:not(.is-active) {
     background-color: color-mix(
       in srgb,
       var(--file-color-color) calc(var(--fc-chip-opacity, 35) * 1%),
       transparent
-    ) !important;
+    );
   }
 }
