@@ -122,7 +122,7 @@ stale.
 Forked from [Red Graphite for Obsidian](https://github.com/seanwcom/Red-Graphite-for-Obsidian)
 by Sean Williams, which is released into the public domain under the Unlicense and
 which in turn takes its colours from Bear.app's Red Graphite theme. The SCSS layout,
-Grunt build and every `app/` and `plugins/` component style are Sean's work; the
+original Grunt build and every `app/` and `plugins/` component style are Sean's work; the
 Newsprint ramp and scheme are the additions here.
 
 ## License
