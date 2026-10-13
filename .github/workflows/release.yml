@@ -1,25 +1,67 @@
 name: Release Obsidian theme
 
+# Releases whenever main carries a manifest.json version that has no release yet,
+# so bumping the version (`npm version <x.y.z>`) and merging is the whole process.
+# Pushes that leave the version alone find the release already there and stop.
 on:
   push:
-    tags:
-      - "*"
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7
 
-      - name: Create release
+      - name: Read version
+        id: version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${GITHUB_REF#refs/tags/}"
+          version="$(jq -r .version manifest.json)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
-          gh release create "$tag" \
-            --title="$tag" \
+          if gh release view "$version" > /dev/null 2>&1; then
+            echo "Release $version already exists; nothing to do."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Obsidian installs the release assets, not the repo, so refuse to ship a
+      # theme.css that doesn't match src/.
+      - name: Use Node.js
+        if: steps.version.outputs.exists == 'false'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Check theme.css is up to date
+        if: steps.version.outputs.exists == 'false'
+        run: |
+          npm ci
+          npm run build:ci
+          if ! git diff --exit-code -- theme.css; then
+            echo "::error::theme.css is out of date. Run 'npm run build' and commit the result."
+            exit 1
+          fi
+
+      # Obsidian requires the tag to equal the manifest version exactly, with no
+      # `v` prefix. `gh release create` makes the tag on this commit.
+      - name: Create release
+        if: steps.version.outputs.exists == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "$VERSION" \
+            --target "$GITHUB_SHA" \
+            --title "$VERSION" \
             --generate-notes \
-            --draft \
             manifest.json theme.css

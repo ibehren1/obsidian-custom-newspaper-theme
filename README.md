@@ -111,11 +111,16 @@ stale.
 
 ## Releasing
 
-1. `npm version <patch|minor|major>` — runs `version-bump.mjs`, syncing
-   `manifest.json` and adding a `versions.json` entry.
-2. `git push && git push --tags`.
-3. `.github/workflows/release.yml` creates a **draft** release with `manifest.json`
-   and `theme.css` attached. Review, then publish.
+1. On a branch, `npm version <patch|minor|major> --no-git-tag-version` — runs
+   `version-bump.mjs`, syncing `manifest.json` and adding a `versions.json` entry.
+2. Commit, open a PR and merge it into `main`.
+3. `.github/workflows/release.yml` sees a `manifest.json` version with no release
+   yet, checks `theme.css` is up to date, then tags the merge commit and publishes
+   the release with `manifest.json` and `theme.css` attached. Pushes that don't
+   change the version do nothing.
+
+There is no need to push a tag by hand. It can also be run from the Actions tab
+(**Run workflow**) if a release ever needs retrying.
 
 ## Credits
 
