@@ -51,7 +51,7 @@
 @use 'plugins/file-color';
 @use 'plugins/style-settings';
 
-// The newspaper scheme is loaded last so it is emitted after every `.theme-light`
+// The Newsprint scheme is loaded last so it is emitted after every `.theme-light`
 // rule it remaps. It also outranks them on specificity, so this is belt and
 // braces rather than the mechanism.
-@use 'themes/theme-newspaper';
+@use 'themes/theme-newsprint';

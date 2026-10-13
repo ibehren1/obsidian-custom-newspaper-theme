@@ -2,7 +2,7 @@
 //
 // Normal Obsidian CTA buttons (`button.mod-cta`, e.g. the PDF export "Save")
 // need nothing here: their fill is already the ink accent and their label is
-// `--text-on-accent`, which theme-newspaper.scss forces light by redefining
+// `--text-on-accent`, which theme-newsprint.scss forces light by redefining
 // `--text-on-accent-inverted`.
 //
 // The Firefox-derived `.dialog` component is the exception. It uses a separate
