@@ -41,6 +41,13 @@ body {
 }
 
 .theme-light {
+  // Outline modals and prompts (command palette, quick switcher) in ink so they
+  // read as a sheet laid over the page rather than blending into it.
+  --modal-border-width: 1px;
+  --modal-border-color: var(--color-base-100);
+  --prompt-border-width: 1px;
+  --prompt-border-color: var(--color-base-100);
+
   .horizontal-tab-nav-item,
   .vertical-tab-nav-item {
     color: var(--color-base-40);

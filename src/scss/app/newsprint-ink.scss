@@ -14,7 +14,7 @@
 // the same isolated element the overlay sits on — without that isolation the
 // blend would reach the app chrome behind the page and mottle it too.
 //
-// Applies only in the newspaper scheme (light, not rg-classic). It is on for
+// Applies only in the Newsprint scheme (light, not rg-classic). It is on for
 // everyone by default; the `disable-newsprint-mottle` Style Settings toggle adds
 // the class that switches it off, and `--newsprint-mottle-opacity` sets how far
 // the paper bleeds through.

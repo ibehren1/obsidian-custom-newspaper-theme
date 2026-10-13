@@ -60,7 +60,7 @@
 // this one ramp on two jobs at once: the light end is both the page surfaces AND
 // the text drawn on the near-black chrome, while the dark end is both the ink on
 // the page AND the fills inside that chrome. That conflict is why the text roles
-// are remapped in `theme-newspaper.scss` instead of the curve being bent to fit
+// are remapped in `theme-newsprint.scss` instead of the curve being bent to fit
 // Red Graphite's choice of steps.
 //
 // Measured against the page (step 20) at the default ink lightness of 4%:
