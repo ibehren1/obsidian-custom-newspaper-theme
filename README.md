@@ -27,6 +27,21 @@ there is no newsprint dark palette.
 
 ![Dark mode, Red Graphite's scheme](screenshots/dark.png)
 
+## Gallery
+
+Settings, in the same light chrome: ink labels, with the open page as a solid
+ink bar.
+
+![The Settings window in light mode](screenshots/settings.png)
+
+The Properties view in the right sidebar, with the property-name suggestions open.
+
+![The Properties view with property-name suggestions](screenshots/properties.png)
+
+Backlinks: linked mentions in the right sidebar, each match shown in context.
+
+![The Backlinks view in the right sidebar](screenshots/backlinks.png)
+
 ## Installation
 
 Not yet in the community directory. To install manually, copy `manifest.json` and
