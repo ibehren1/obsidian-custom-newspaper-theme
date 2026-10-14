@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-newsprint-theme",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "A flat monochrome e-ink newsprint theme for Obsidian, built on Red Graphite.",
 	"license": "MIT",
 	"scripts": {
