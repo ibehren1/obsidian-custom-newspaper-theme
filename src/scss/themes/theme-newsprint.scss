@@ -191,6 +191,84 @@
     color: var(--text-normal);
   }
 
+  // Red Graphite also colours the parts of a suggestion row — title, the info
+  // text after a colon, group headings, the icon — through a selector chain six
+  // classes deep (app/suggestion-dropdown.scss), with steps that only read on
+  // dark chrome. The chain is repeated here so it outranks those. This is the
+  // property-name dropdown as well as search and the other suggesters.
+  .suggestion-container {
+    color: var(--text-normal);
+
+    .suggestion .suggestion-item {
+      .suggestion-icon,
+      .suggestion-flair {
+        color: var(--text-muted);
+      }
+
+      .suggestion-content .suggestion-title {
+        color: var(--text-normal);
+
+        .search-suggest-info-text {
+          color: var(--text-muted);
+        }
+
+        &.list-item-part.mod-extended {
+          color: var(--text-muted);
+        }
+      }
+
+      // The selected row stays an ink bar, so everything on it goes light.
+      &.is-selected {
+        .suggestion-icon,
+        .suggestion-flair {
+          color: var(--text-on-accent);
+        }
+
+        .suggestion-content .suggestion-title {
+          color: var(--text-on-accent);
+
+          .search-suggest-info-text {
+            color: var(--text-on-accent);
+          }
+
+          &.list-item-part.mod-extended {
+            color: var(--text-on-accent);
+          }
+        }
+      }
+    }
+  }
+
+  // The settings sidebar is light chrome too, so its rows get the same
+  // treatment as the file navigator below: ink at rest, a quiet wash on hover,
+  // and an ink bar with a light label for the open page. Obsidian's own
+  // `body:not(.is-phone) … .is-active` rule outranks app/modals.scss on the
+  // background, which left a light label on a light wash; these outrank both.
+  .vertical-tab-nav-item,
+  .horizontal-tab-nav-item {
+    color: var(--text-muted);
+  }
+
+  @media (hover: hover) {
+    .vertical-tab-nav-item:hover,
+    .horizontal-tab-nav-item:hover {
+      color: var(--text-normal);
+      background-color: var(--background-modifier-hover);
+    }
+  }
+
+  // After the hover rule, at the same specificity, so the open page keeps its
+  // ink bar under the pointer.
+  .vertical-tab-nav-item.is-active,
+  .horizontal-tab-nav-item.is-active {
+    color: var(--text-on-accent);
+    background-color: var(--interactive-accent);
+
+    .vertical-tab-nav-item-icon {
+      color: var(--text-on-accent);
+    }
+  }
+
   // The file navigator is light now, like the rest of the chrome. Red Graphite
   // colours its rows light for the dark sidebar it used to have, so the nav text,
   // collapse arrows and indentation guides come back to ink. The selected file is
@@ -212,6 +290,69 @@
   .mod-right-split .tree-item-self,
   .search-result-file-title {
     color: var(--text-muted);
+  }
+
+  // The outline marks the current heading with the same ink bar as the
+  // selected file, and the rule above would otherwise outrank its light label.
+  .mod-right-split .tree-item-self.is-active {
+    color: var(--nav-item-color-active);
+  }
+
+  // The backlink and outgoing-link headers and expanded search results get
+  // their own, more specific light steps in app/backlink-pane.scss, and the
+  // hover step there is the lightest on the ramp.
+  .search-result:not(.is-collapsed) .search-result-file-title,
+  .backlink-pane > .tree-item-self,
+  .outgoing-link-pane > .tree-item-self {
+    color: var(--text-muted);
+  }
+
+  @media (hover: hover) {
+    .backlink-pane > .tree-item-self.is-clickable:hover,
+    .outgoing-link-pane > .tree-item-self.is-clickable:hover {
+      color: var(--text-normal);
+    }
+  }
+
+  // The Properties view in the right sidebar is light chrome now as well;
+  // app/properties.scss coloured its icons, values and pills for the dark one.
+  // The selector chain is repeated so these outrank it, focused state included.
+  .mod-right-split .metadata-container .metadata-content {
+    .metadata-property-icon {
+      color: var(--text-muted);
+    }
+
+    .metadata-property-key,
+    .metadata-property-value {
+      border-bottom-color: var(--background-modifier-border);
+    }
+
+    .metadata-property:focus-within {
+      box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+
+      .metadata-property-value:focus-within {
+        background-color: var(--background-modifier-hover);
+
+        .multi-select-input {
+          color: var(--text-normal);
+        }
+      }
+    }
+
+    .multi-select-input,
+    .metadata-input-longtext,
+    input {
+      color: var(--text-normal);
+    }
+
+    .metadata-property:not([data-property-key="tags"]) {
+      --pill-color: var(--text-normal);
+    }
+
+    .metadata-add-button:hover {
+      color: var(--text-normal);
+      background-color: var(--background-modifier-hover);
+    }
   }
 
   // --- Ink rules ------------------------------------------------------------
